@@ -5,6 +5,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 export class LoggerMiddleware implements NestMiddleware {
   use(req: FastifyRequest['raw'], res: FastifyReply['raw'], next: () => void) {
     console.log('Request...');
+    console.log('Request Headers:', req.headers);
     next();
   }
 }
