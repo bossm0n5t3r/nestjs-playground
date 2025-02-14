@@ -1,5 +1,5 @@
 import { Controller, Get, Req } from '@nestjs/common';
-import { RouteConfig } from '@nestjs/platform-fastify';
+import { RouteConfig, RouteConstraints } from '@nestjs/platform-fastify';
 import { FastifyRequest } from 'fastify';
 import { AppService } from './app.service';
 
@@ -21,5 +21,13 @@ export class AppController {
     // But req.routeOptions.config.output is throw error (Property 'output' does not exist on type 'FastifyContextConfig & FastifyRouteConfig'.)
     const config = (req.routeOptions.config as { output?: string }) || {};
     return config.output;
+  }
+
+  // TODO Doesn't work
+  @RouteConstraints({ version: '1.2.x' })
+  @Get('/route-constraints')
+  newFeature(@Req() req: FastifyRequest): string {
+    console.log('req.headers', req.headers);
+    return 'This works only for version >= 1.2.x';
   }
 }
