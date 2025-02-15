@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Header,
@@ -10,6 +11,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
+import { Observable, of } from 'rxjs';
+import { CreateCatDto } from './dto/create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
@@ -59,5 +62,28 @@ export class CatsController {
   @Get(':id')
   findOne(@Param('id') id: string): string {
     return `This action returns a #${id} cat`;
+  }
+
+  @Get('async')
+  findAllWithAsync(): Observable<any[]> {
+    return of([]);
+  }
+
+  @Post('async')
+  async createWithAsync(@Body() createCatDto: CreateCatDto) {
+    // Simulate an asynchronous operation
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log('Cat created with async', createCatDto);
+    return 'This action adds a new cat';
+  }
+
+  @Get('query-parameters')
+  async findAllWithQueryParameters(
+    @Query('age') age: number,
+    @Query('breed') breed: string,
+  ) {
+    // Simulate an asynchronous operation
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return `This action returns all cats filtered by age: ${age} and breed: ${breed}`;
   }
 }
