@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -15,6 +22,13 @@ export class CatsController {
 
   @Get()
   findAll(): Observable<Cat[]> {
-    return of(this.catsService.findAll() as Cat[]);
+    return of(this.catsService.findAll());
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Observable<Cat> {
+    throw new NotFoundException(`Not found: ${id}`, {
+      description: 'This is a custom message',
+    });
   }
 }
