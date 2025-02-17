@@ -4,13 +4,15 @@ import {
   NestModule,
   ValidationPipe,
 } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { LoggerMiddleware } from './logger.middleware';
+import { LoggingInterceptor } from './logging.interceptor';
 import { RolesGuard } from './roles.guard';
+import { TransformInterceptor } from './transform.interceptor';
 
 @Module({
   imports: [CatsModule],
@@ -28,6 +30,14 @@ import { RolesGuard } from './roles.guard';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
   ],
 })
