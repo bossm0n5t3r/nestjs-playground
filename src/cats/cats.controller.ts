@@ -9,9 +9,9 @@ import {
   Post,
   Put,
   UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
+import { Roles } from '../roles.decorator';
 import { ZodValidationPipe } from '../zod.validation.pipe';
 import { CatsService } from './cats.service';
 import { CreateCatDto, createCatSchema } from './dto/create-cat.dto';
@@ -24,6 +24,7 @@ export class CatsController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createCatSchema))
+  @Roles(['admin'])
   create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
