@@ -9,7 +9,6 @@ import {
   Post,
   Put,
   UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { ZodValidationPipe } from '../zod.validation.pipe';
