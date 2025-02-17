@@ -4,12 +4,13 @@ import {
   NestModule,
   ValidationPipe,
 } from '@nestjs/common';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { LoggerMiddleware } from './logger.middleware';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   imports: [CatsModule],
@@ -23,6 +24,10 @@ import { LoggerMiddleware } from './logger.middleware';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
