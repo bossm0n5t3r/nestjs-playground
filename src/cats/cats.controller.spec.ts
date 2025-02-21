@@ -1,5 +1,6 @@
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
+import { Cat } from './interfaces/cat.interface';
 
 describe('CatsController', () => {
   let catsController: CatsController;
@@ -12,10 +13,14 @@ describe('CatsController', () => {
 
   describe('findAll', () => {
     it('should return an array of cats', () => {
-      const result = [{ id: 1, name: 'test', age: 2, breed: 'test breed' }];
-      jest.spyOn(catsService, 'findAll').mockImplementation(() => result);
+      const expected = [{ id: 1, name: 'test', age: 2, breed: 'test breed' }];
+      jest.spyOn(catsService, 'findAll').mockImplementation(() => expected);
 
-      expect(catsController.findAll()).toBe(result);
+      let result: Cat[] = [];
+      catsController.findAll().subscribe((data) => {
+        result = data;
+      });
+      expect(result).toBe(expected);
     });
   });
 });
