@@ -5,7 +5,20 @@ import { CatsService } from './cats.service';
 import { Cat, CatSchema } from './schemas/cat.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Cat.name, schema: CatSchema }])],
+  imports: [
+    MongooseModule.forFeatureAsync([
+      {
+        name: Cat.name,
+        useFactory: () => {
+          const schema = CatSchema;
+          schema.pre('save', () => {
+            console.log('Hello from pre save');
+          });
+          return schema;
+        },
+      },
+    ]),
+  ],
   controllers: [CatsController],
   providers: [CatsService],
 })
