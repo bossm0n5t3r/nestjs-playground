@@ -4,6 +4,7 @@ import {
   NestModule,
   ValidationPipe,
 } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,7 +16,7 @@ import { RolesGuard } from './roles.guard';
 import { TransformInterceptor } from './transform.interceptor';
 
 @Module({
-  imports: [CatsModule],
+  imports: [ConfigModule.forRoot(), CatsModule],
   controllers: [AppController],
   providers: [
     AppService,
