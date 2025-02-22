@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@keyv/valkey": "^1.0.3",
     "@nestjs/cache-manager": "^3.0.0",
     "@nestjs/common": "^11.0.9",
     "@nestjs/config": "^4.0.0",
@@ -32,6 +33,7 @@
     "class-validator": "^0.14.1",
     "fastify": "^5.2.1",
     "fastify-constraints": "^2.0.0",
+    "keyv": "^5.2.3",
     "mongoose": "^8.10.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
