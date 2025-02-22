@@ -1,3 +1,4 @@
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -6,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -16,6 +18,7 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interfaces/cat.interface';
 
 @Controller('cats')
+@UseInterceptors(CacheInterceptor)
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
