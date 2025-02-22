@@ -4,8 +4,10 @@ import {
   NestModule,
   ValidationPipe,
 } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
@@ -16,7 +18,26 @@ import { RolesGuard } from './roles.guard';
 import { TransformInterceptor } from './transform.interceptor';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CatsModule],
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        uri: config.get<string>('MONGODB_URI'),
+        onConnectionCreate: (connection: Connection) => {
+          connection.on('connected', () => console.log('connected'));
+          connection.on('open', () => console.log('open'));
+          connection.on('disconnected', () => console.log('disconnected'));
+          connection.on('reconnected', () => console.log('reconnected'));
+          connection.on('disconnecting', () => console.log('disconnecting'));
+
+          return connection;
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    CatsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

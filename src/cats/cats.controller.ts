@@ -2,16 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
   NotFoundException,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   UsePipes,
 } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
-import { Roles } from '../roles.decorator';
+import { Observable } from 'rxjs';
 import { ZodValidationPipe } from '../zod.validation.pipe';
 import { CatsService } from './cats.service';
 import { CreateCatDto, createCatSchema } from './dto/create-cat.dto';
@@ -24,40 +21,33 @@ export class CatsController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createCatSchema))
-  @Roles(['admin'])
   create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
 
-  @Put(':id')
+  @Put(':name')
   update(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
+    @Param('name')
+    name: string,
     @Body() updateCatDto: UpdateCatDto,
-  ) {
-    this.catsService.update(id, updateCatDto);
+  ): Observable<Cat> {
+    return this.catsService.update(name, updateCatDto);
   }
 
   @Get()
   findAll(): Observable<Cat[]> {
-    return of(this.catsService.findAll());
+    return this.catsService.findAll();
   }
 
-  @Get(':id')
+  @Get(':name')
   findOne(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
+    @Param('name')
+    name: string,
   ): Observable<Cat> {
     try {
-      return of(this.catsService.findOne(id));
+      return this.catsService.findOne(name);
     } catch (error) {
-      throw new NotFoundException(`Not found: ${id}`, {
+      throw new NotFoundException(`Not found: ${name}`, {
         description: (error as Error).message || 'This is a custom message',
       });
     }
