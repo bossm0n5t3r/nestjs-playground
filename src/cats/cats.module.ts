@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatsController } from './cats.controller';
@@ -6,6 +7,9 @@ import { Cat, CatSchema } from './schemas/cat.schema';
 
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 5000, // milliseconds
+    }),
     MongooseModule.forFeatureAsync([
       {
         name: Cat.name,
