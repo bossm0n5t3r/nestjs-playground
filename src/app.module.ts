@@ -22,6 +22,7 @@ import { TransformInterceptor } from './transform.interceptor';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    // FIXME: Set ValKey as the store for the cache manager, but working as InMemory
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
