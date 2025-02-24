@@ -1,3 +1,4 @@
+import compression from '@fastify/compress';
 import { ConsoleLogger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -17,6 +18,7 @@ async function bootstrap() {
       }),
     },
   );
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();
