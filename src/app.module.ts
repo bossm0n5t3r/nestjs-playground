@@ -9,6 +9,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 import Keyv from 'keyv';
 import { Connection } from 'mongoose';
 import { AppController } from './app.controller';
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     // FIXME: Set ValKey as the store for the cache manager, but working as InMemory
     CacheModule.registerAsync({
