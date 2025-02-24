@@ -19,6 +19,7 @@ import { LoggerMiddleware } from './logger.middleware';
 import { LoggingInterceptor } from './logging.interceptor';
 import { RolesGuard } from './roles.guard';
 import { TransformInterceptor } from './transform.interceptor';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { TransformInterceptor } from './transform.interceptor';
       inject: [ConfigService],
     }),
     CatsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
