@@ -29,6 +29,7 @@
     "@nestjs/mongoose": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-fastify": "^11.0.9",
+    "@nestjs/schedule": "^5.0.1",
     "cache-manager": "^6.4.0",
     "cacheable": "^1.8.8",
     "class-transformer": "^0.5.1",
