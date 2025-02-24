@@ -1,8 +1,9 @@
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { CACHE_MANAGER, CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -20,7 +21,12 @@ import { Cat } from './interfaces/cat.interface';
 @Controller('cats')
 @UseInterceptors(CacheInterceptor)
 export class CatsController {
-  constructor(private catsService: CatsService) {}
+  constructor(
+    private catsService: CatsService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {
+    console.log('cacheManager', cacheManager);
+  }
 
   @Post()
   @UsePipes(new ZodValidationPipe(createCatSchema))
@@ -39,6 +45,7 @@ export class CatsController {
 
   @Get()
   findAll(): Observable<Cat[]> {
+    console.log('Fetching cats');
     return this.catsService.findAll();
   }
 
