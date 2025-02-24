@@ -19,6 +19,7 @@ import { HttpExceptionFilter } from './http-exception.filter';
 import { LoggerMiddleware } from './logger.middleware';
 import { LoggingInterceptor } from './logging.interceptor';
 import { RolesGuard } from './roles.guard';
+import { TasksModule } from './tasks/tasks.module';
 import { TransformInterceptor } from './transform.interceptor';
 import { UsersModule } from './users/users.module';
 
@@ -56,6 +57,7 @@ import { UsersModule } from './users/users.module';
     }),
     CatsModule,
     UsersModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [
