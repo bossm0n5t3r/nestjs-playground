@@ -1,3 +1,5 @@
+import KeyvValkey from '@keyv/valkey';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import {
   MiddlewareConsumer,
   Module,
@@ -20,6 +22,15 @@ import { TransformInterceptor } from './transform.interceptor';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        store: () =>
+          new KeyvValkey(configService.get<string>('CACHE_URL') || ''),
+      }),
+      inject: [ConfigService],
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -60,6 +71,10 @@ import { TransformInterceptor } from './transform.interceptor';
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
   ],
 })
