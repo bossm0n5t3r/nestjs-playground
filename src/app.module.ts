@@ -9,6 +9,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import Keyv from 'keyv';
 import { Connection } from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -28,7 +29,9 @@ import { TransformInterceptor } from './transform.interceptor';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         store: () =>
-          new KeyvValkey(configService.get<string>('CACHE_URL') || ''),
+          new Keyv({
+            store: new KeyvValkey(configService.get<string>('CACHE_URL') || ''),
+          }),
       }),
       inject: [ConfigService],
     }),
