@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:6.0.5-jammy
+    platform: linux/arm64/v8
+    container_name: nestjs-playground-mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: securepass
+    volumes:
+      - mongo_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+  cache:
+    container_name: nestjs-playground-valkey
+    image: bitnami/valkey:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - VALKEY_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    restart: unless-stopped
+    ports:
+      - '63790:6379'
+
+volumes:
+  mongo_data:

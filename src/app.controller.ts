@@ -1,6 +1,7 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { RouteConfig, RouteConstraints } from '@nestjs/platform-fastify';
 import { FastifyRequest } from 'fastify';
+import { RouteShorthandOptions } from 'fastify/types/route';
 import { AppService } from './app.service';
 
 @Controller()
@@ -24,7 +25,7 @@ export class AppController {
   }
 
   // TODO Doesn't work
-  @RouteConstraints({ version: '1.2.x' })
+  @RouteConstraints({ version: '>=1.2.0' } as RouteShorthandOptions)
   @Get('/route-constraints')
   newFeature(@Req() req: FastifyRequest): string {
     console.log('req.headers', req.headers);

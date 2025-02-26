@@ -1,7 +1,14 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
+import { of } from 'rxjs';
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
-import { Cat } from './interfaces/cat.interface';
+import { Cat } from './schemas/cat.schema';
+
+class MockCatModel {
+  static find = jest.fn().mockReturnThis();
+  static exec = jest.fn().mockResolvedValue([]);
+}
 
 describe('CatsController', () => {
   let catsController: CatsController;
@@ -10,7 +17,10 @@ describe('CatsController', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [CatsController],
-      providers: [CatsService],
+      providers: [
+        CatsService,
+        { provide: getModelToken(Cat.name), useValue: MockCatModel },
+      ],
     }).compile();
 
     catsService = moduleRef.get(CatsService);
@@ -19,8 +29,8 @@ describe('CatsController', () => {
 
   describe('findAll', () => {
     it('should return an array of cats', () => {
-      const expected = [{ id: 1, name: 'test', age: 2, breed: 'test breed' }];
-      jest.spyOn(catsService, 'findAll').mockImplementation(() => expected);
+      const expected = [{ name: 'test', age: 1, breed: 'test breed' }];
+      jest.spyOn(catsService, 'findAll').mockImplementation(() => of(expected));
 
       let result: Cat[] = [];
       catsController.findAll().subscribe((data) => {
